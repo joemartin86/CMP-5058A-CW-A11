@@ -1,3 +1,5 @@
+import copy
+
 """
 Created on Mon Nov 16 15:13:04 2026
 File: a1_state.py
@@ -32,26 +34,37 @@ class State:
             out += ' '.join(row) + '\n'
         return out
 
-    def move(self):
+    def move(self, target):
         for x in range(State.size):
             for y in range(State.size):
                 temp = s.letters[x][y]
-                if temp == "M":
+                if temp == target:
                     print("index", x, y)
                     if s.grid[x][y] == '1':
                         s.grid[x][y] = '0'
                     else:
                         print("illegal move")  
-                else:
-                    print("not worked")
+                #else:
+                    #print("not worked")
+    def successors(self):
+         futuregrid.grid = copy.deepcopy(s.grid)
+         for x in range(State.size):
+             for y in range(State.size):
+                futuregrid.grid = copy.deepcopy(s.grid)
+                if futuregrid.grid[x][y] == '1':
+                    futuregrid.grid[x][y] = '0'
+                    show(futuregrid)
 
 
 
-def show():
+def show(toprint):
     print("--Grid--")
-    print(s)
+    print(toprint)
 
 s = State(None)
-show()
-s.move()
-show()
+futuregrid = State(None)
+show(s)
+s.move("M")
+show(s)
+s.successors()
+show(s)
