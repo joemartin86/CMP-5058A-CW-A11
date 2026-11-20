@@ -1,4 +1,6 @@
+# Very important, do not remove or else both successors and futuresight break.
 import copy
+import random
 
 """
 Created on Mon Nov 16 15:13:04 2026
@@ -6,6 +8,8 @@ File: a1_state.py
 Group number: A11
 Student ID: 100539476, 100510450, 100539188
 """
+
+# Robert here, im going to try adding notes to whatever code I changed / added to make it clear what it does.
 
 class State:
 
@@ -34,6 +38,7 @@ class State:
             out += ' '.join(row) + '\n'
         return out
 
+    # Move now takes a target.
     def move(self, target):
         for x in range(State.size):
             for y in range(State.size):
@@ -48,6 +53,9 @@ class State:
                 #else:
                     #print("not worked")
 
+
+
+    # Successors can output all potential reachable gamestates with 1 move.
     def successors(self):
          futuregrid.grid = copy.deepcopy(s.grid)
          for x in range(State.size):
@@ -57,31 +65,35 @@ class State:
                     futuregrid.grid[x][y] = '0'
                     #show(futuregrid)
 
-    def futuresight(self, reachcost, depth):
-        futuregrid2 = State(None)
-        futuregrid2.grid = copy.deepcopy(self.grid)
-        precost = reachcost
-        if depth == 2:
-            #print("the cost is",reachcost)
-            #show(futuregrid2)
-            return reachcost
-        else:
-         depth = depth + 1
-         for x in range(State.size):
-             for y in range(State.size):
-                futuregrid2.grid = copy.deepcopy(self.grid)
-                reachcost = precost
-                if futuregrid2.grid[x][y] == '1':
-                    futuregrid2.grid[x][y] = '0'
-                    reachcost = reachcost + movecost(futuregrid2, x, y)
-                    #show(futuregrid2)
-                    futuregrid2.futuresight(reachcost, depth)
-                    #show(futuregrid)
+
+    # Returns the "best" (the cheapest) move currently possible. 
+    # Does not currently account for points gained from hingers.
+    def futuresight(self):
+             futuregrid.grid = copy.deepcopy(s.grid)
+             runningcost = 100
+             costofmove = 0
+             agoodmove = State(None)
+             for x in range(State.size):
+                 for y in range(State.size):
+                    futuregrid.grid = copy.deepcopy(s.grid)
+                    if futuregrid.grid[x][y] == '1':
+                        futuregrid.grid[x][y] = '0'
+                        costofmove = movecost(futuregrid, x, y)
+                        # Lazy version of adding variance to the prediction code for when two moves have equal cost/reward.
+                        # Probably should be replaced by some more advanced version in the actual AI code.
+                        if runningcost == costofmove:
+                            if random.random() > 0.7:
+                                runningcost = copy.deepcopy(costofmove)
+                                agoodmove.grid = copy.deepcopy(futuregrid.grid)
+                        if runningcost > costofmove:
+                            runningcost = copy.deepcopy(costofmove)
+                            agoodmove.grid = copy.deepcopy(futuregrid.grid)
+             return agoodmove
+    
 
 
 
-
-
+# Returns the cost of a move on the given board. Works on corner / edge tiles.
 def movecost(self, xcord, ycord):
     xcheck = 2
     ycheck = 2
@@ -103,10 +115,20 @@ def movecost(self, xcord, ycord):
 
     
 
-
+# Now needs a grid to be given as an input.
 def show(toprint):
     print("--Grid--")
     print(toprint)
+
+
+# Allows a set of positions to be turned into a letter for the "move" function to use.
+def translator(self, xcord, ycord):
+    for x in range(State.size):
+                for y in range(State.size):
+                    temp = s.letters[x][y]
+                    if x == xcord and y == ycord:
+                        return s.letters[x][y]
+                        
 
 s = State(None)
 futuregrid = State(None)
@@ -114,7 +136,13 @@ show(s)
 s.move("M")
 show(s)
 s.successors()
-s.futuresight(0, 0)
+show(s.futuresight())
 #show(s)
+
+
+
+    
+
+
 
 
