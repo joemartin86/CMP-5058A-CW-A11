@@ -42,10 +42,12 @@ class State:
                     print("index", x, y)
                     if s.grid[x][y] == '1':
                         s.grid[x][y] = '0'
+                        movecost(s, x, y)
                     else:
                         print("illegal move")  
                 #else:
                     #print("not worked")
+
     def successors(self):
          futuregrid.grid = copy.deepcopy(s.grid)
          for x in range(State.size):
@@ -53,8 +55,53 @@ class State:
                 futuregrid.grid = copy.deepcopy(s.grid)
                 if futuregrid.grid[x][y] == '1':
                     futuregrid.grid[x][y] = '0'
-                    show(futuregrid)
+                    #show(futuregrid)
 
+    def futuresight(self, reachcost, depth):
+        futuregrid2 = State(None)
+        futuregrid2.grid = copy.deepcopy(self.grid)
+        precost = reachcost
+        if depth == 2:
+            #print("the cost is",reachcost)
+            #show(futuregrid2)
+            return reachcost
+        else:
+         depth = depth + 1
+         for x in range(State.size):
+             for y in range(State.size):
+                futuregrid2.grid = copy.deepcopy(self.grid)
+                reachcost = precost
+                if futuregrid2.grid[x][y] == '1':
+                    futuregrid2.grid[x][y] = '0'
+                    reachcost = reachcost + movecost(futuregrid2, x, y)
+                    #show(futuregrid2)
+                    futuregrid2.futuresight(reachcost, depth)
+                    #show(futuregrid)
+
+
+
+
+
+def movecost(self, xcord, ycord):
+    xcheck = 2
+    ycheck = 2
+    xstart = -1
+    ystart = -1
+    runningcost = 0
+    if(xcord == 0):
+        xstart = 0
+    if(ycord == 0):
+        ystart = 0
+    if(xcord == 4):
+       xcheck = 1
+    if(ycord == 4):
+        ycheck = 1
+    for x in range(xstart, xcheck):
+        for y in range(ystart, ycheck):
+            runningcost = runningcost + int(self.grid[x+xcord][y+ycord])
+    return runningcost
+
+    
 
 
 def show(toprint):
@@ -67,4 +114,7 @@ show(s)
 s.move("M")
 show(s)
 s.successors()
-show(s)
+s.futuresight(0, 0)
+#show(s)
+
+
