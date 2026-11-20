@@ -45,6 +45,12 @@ class State:
                 else:
                     print("not worked")
 
+def successors(self):
+     futuregrid = self.grid
+     for x in range(State.size):
+                for y in range(State.size):
+                   futuregrid.move()  
+
 
 
 def show():
@@ -55,3 +61,4 @@ s = State(None)
 show()
 s.move()
 show()
+s.successors()
